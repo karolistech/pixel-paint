@@ -50,3 +50,20 @@ body {
   flex: 1;
   padding-block: 0.5rem;
 }
+
+.canvas {
+  display: grid;
+  width: min(100%, 600px);
+  aspect-ratio: 1 / 1;
+  background-color: #fff;
+}
+
+.canvas--gridlines {
+  border-top: 1px solid #333;
+  border-right: 1px solid #333;
+}
+
+.canvas--gridlines .canvas__cell {
+  border-bottom: 1px solid #333;
+  border-left: 1px solid #333;
+}
