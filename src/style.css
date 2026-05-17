@@ -50,6 +50,32 @@ body {
   align-items: center;
 }
 
+.controls__input--grid-size {
+  appearance: none;
+  width: 100%;
+  height: 8px;
+  border: 1px solid #999;
+  border-radius: 4px;
+  background-color: #eee;
+  cursor: pointer;
+}
+
+.controls__input--grid-size::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border: none;
+  border-radius: 50%;
+  background-color: #333;
+}
+
+.controls__input--grid-size::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: #333;
+}
+
 .controls__btn {
   flex: 1;
   padding-block: 0.5rem;
