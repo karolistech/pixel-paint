@@ -1,8 +1,12 @@
 const canvas = document.querySelector<HTMLDivElement>(".canvas")!;
 const penColorInput = document.querySelector<HTMLInputElement>("#pen-color")!;
 const canvasColorInput = document.querySelector<HTMLInputElement>("#canvas-color")!;
+const gridSizeLabel = document.querySelector<HTMLLabelElement>("label[for='grid-size']")!;
+const gridSizeInput = document.querySelector<HTMLInputElement>("#grid-size")!;
 const randomColorBtn = document.querySelector<HTMLButtonElement>(".controls__btn--random-color")!;
 const eraserBtn = document.querySelector<HTMLButtonElement>(".controls__btn--eraser")!;
+const gridlinesBtn = document.querySelector<HTMLButtonElement>(".controls__btn--gridlines")!;
+const clearBtn = document.querySelector<HTMLButtonElement>(".controls__btn--clear")!;
 
 type Mode = "pen-color" | "random-color" | "eraser";
 
@@ -11,6 +15,7 @@ const state = {
   penColor: penColorInput.value,
   canvasColor: canvasColorInput.value,
   gridSize: 16,
+  gridlines: true,
   painted: null as HTMLDivElement | null
 };
 
@@ -43,6 +48,17 @@ function updateCanvasColor() {
   canvas.style.backgroundColor = state.canvasColor;
 }
 
+function updateGridSize(e: Event) {
+  const gridSize = gridSizeInput.valueAsNumber;
+
+  gridSizeLabel.textContent = `Grid Size: ${gridSize} x ${gridSize}`;
+
+  if (e.type === "change") {
+    state.gridSize = gridSize;
+    createGrid(state.gridSize);
+  }
+}
+
 function paint(e: PointerEvent) {
   if (e.buttons !== 1) return;
 
@@ -73,6 +89,18 @@ function getRandomColor(): string {
   return hexCode;
 }
 
+function toggleGridlines() {
+  state.gridlines = !state.gridlines;
+
+  canvas.classList.toggle("canvas--gridlines", state.gridlines === true);
+  gridlinesBtn.classList.toggle("controls__btn--selected", state.gridlines === true);
+}
+
+function clearCanvas() {
+  const cells = canvas.querySelectorAll<HTMLDivElement>(".canvas__cell");
+  cells.forEach(cell => cell.style.removeProperty("background-color"));
+}
+
 function setupEvents() {
   canvas.addEventListener("pointerdown", paint);
   canvas.addEventListener("pointermove", paint);
@@ -81,9 +109,13 @@ function setupEvents() {
 
   penColorInput.addEventListener("input", updatePenColor);
   canvasColorInput.addEventListener("input", updateCanvasColor);
+  gridSizeInput.addEventListener("input", updateGridSize);
+  gridSizeInput.addEventListener("change", updateGridSize);
 
   randomColorBtn.addEventListener("click", () => setMode("random-color"));
   eraserBtn.addEventListener("click", () => setMode("eraser"));
+  gridlinesBtn.addEventListener("click", toggleGridlines);
+  clearBtn.addEventListener("click", clearCanvas);
 }
 
 function init() {
