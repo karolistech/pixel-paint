@@ -50,6 +50,28 @@ body {
   align-items: center;
 }
 
+.controls__input--color {
+  width: 50px;
+  height: 25px;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.controls__input--color::-moz-color-swatch {
+  border: 1px solid #999;
+  border-radius: 4px;
+}
+
+.controls__input--color::-webkit-color-swatch {
+  border: 1px solid #999;
+  border-radius: 4px;
+}
+
+.controls__input--color::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
 .controls__input--grid-size {
   appearance: none;
   width: 100%;
