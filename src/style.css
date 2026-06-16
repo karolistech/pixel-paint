@@ -22,6 +22,10 @@ body {
 
 .main {
   padding: 1.5rem 0.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
 }
 
 .controls {
@@ -53,4 +57,15 @@ body {
 
 .canvas {
   width: min(100%, 576px);
+}
+
+@media (min-width: 768px) {
+  .main {
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .controls__group {
+    flex-direction: column;
+  }
 }
