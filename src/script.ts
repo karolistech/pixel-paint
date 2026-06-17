@@ -1,16 +1,22 @@
 const canvas = document.querySelector<HTMLCanvasElement>(".canvas")!;
 const ctx = canvas.getContext("2d")!;
 
+const paintColorInput = document.querySelector<HTMLInputElement>(".controls__input--paint-color")!;
 const gridSizeLabel = document.querySelector<HTMLLabelElement>(".controls__label--grid-size")!;
 const gridSizeInput = document.querySelector<HTMLInputElement>(".controls__input--grid-size")!;
 
 const gridSizes = [8, 16, 32, 48, 64] as const;
+
+type PaintMode = "custom-color" | "random-color" | "eraser";
 
 const state = {
   canvasSize: 576,
   canvasColor: "#fff",
   gridSize: 16,
   gridlinesColor: "#aaa",
+  paintMode: "custom-color" as PaintMode,
+  paintColor: paintColorInput.value,
+  paintedCells: new Map<number, string>(),
 };
 
 function renderCanvas() {
@@ -18,6 +24,14 @@ function renderCanvas() {
 
   ctx.fillStyle = state.canvasColor;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  for (const [cellIndex, color] of state.paintedCells) {
+    const col = cellIndex % state.gridSize;
+    const row = Math.floor(cellIndex / state.gridSize);
+
+    ctx.fillStyle = color;
+    ctx.fillRect(col * cellSize, row * cellSize, cellSize, cellSize);
+  }
 
   ctx.beginPath();
 
@@ -35,6 +49,34 @@ function renderCanvas() {
   ctx.stroke();
 }
 
+function handleCanvasPointer(e: PointerEvent) {
+  if (e.buttons !== 1) return;
+
+  const rect = canvas.getBoundingClientRect();
+  const scale = canvas.width / rect.width;
+
+  const x = (e.clientX - rect.left) * scale;
+  const y = (e.clientY - rect.top) * scale;
+
+  const cellSize = canvas.width / state.gridSize;
+  const col = Math.floor(x / cellSize);
+  const row = Math.floor(y / cellSize);
+
+  const cellIndex = row * state.gridSize + col;
+
+  switch (state.paintMode) {
+    case "custom-color":
+      state.paintedCells.set(cellIndex, state.paintColor);
+      break;
+  }
+
+  renderCanvas();
+}
+
+function setPaintColor() {
+  state.paintColor = paintColorInput.value;
+}
+
 function updateGridSize(e: Event) {
   const index = gridSizeInput.valueAsNumber;
   const gridSize = gridSizes[index];
@@ -48,6 +90,10 @@ function updateGridSize(e: Event) {
 }
 
 function setupEvents() {
+  canvas.addEventListener("pointerdown", handleCanvasPointer);
+  canvas.addEventListener("pointermove", handleCanvasPointer);
+
+  paintColorInput.addEventListener("input", setPaintColor);
   gridSizeInput.addEventListener("input", updateGridSize);
   gridSizeInput.addEventListener("change", updateGridSize);
 }
