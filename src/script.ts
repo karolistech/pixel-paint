@@ -88,6 +88,10 @@ function handleCanvasPointer(e: PointerEvent) {
 
 function setPaintMode(mode: PaintMode) {
   state.paintMode = mode;
+
+  customColorBtn.classList.toggle("controls__btn--selected", state.paintMode === "custom-color");
+  randomColorBtn.classList.toggle("controls__btn--selected", state.paintMode === "random-color");
+  eraserBtn.classList.toggle("controls__btn--selected", state.paintMode === "eraser");
 }
 
 function setPaintColor() {
