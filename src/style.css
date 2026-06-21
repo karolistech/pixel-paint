@@ -50,6 +50,26 @@ body {
   align-items: center;
 }
 
+.controls__input--color {
+  width: 50px;
+  height: 25px;
+  border: 1px solid #aaa;
+  border-radius: 0;
+  cursor: pointer;
+}
+
+.controls__input--color::-moz-color-swatch {
+  border: none;
+}
+
+.controls__input--color::-webkit-color-swatch {
+  border: none;
+}
+
+.controls__input--color::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
 .controls__btn {
   flex: 1;
   padding-block: 0.5rem;
