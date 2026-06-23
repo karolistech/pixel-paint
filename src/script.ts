@@ -1,16 +1,30 @@
-const canvas = document.querySelector<HTMLCanvasElement>(".canvas")!;
-const ctx = canvas.getContext("2d")!;
+function qs<T extends HTMLElement>(selector: string): T {
+  const element = document.querySelector<T>(selector);
+  if (element === null) throw new Error(`Element not found: ${selector}`);
 
-const canvasColorInput = document.querySelector<HTMLInputElement>(".controls__input--canvas-color")!;
-const paintColorInput = document.querySelector<HTMLInputElement>(".controls__input--paint-color")!;
-const gridSizeLabel = document.querySelector<HTMLLabelElement>(".controls__label--grid-size")!;
-const gridSizeInput = document.querySelector<HTMLInputElement>(".controls__input--grid-size")!;
-const customColorBtn = document.querySelector<HTMLButtonElement>(".controls__btn--custom-color")!;
-const randomColorBtn = document.querySelector<HTMLButtonElement>(".controls__btn--random-color")!;
-const eraserBtn = document.querySelector<HTMLButtonElement>(".controls__btn--eraser")!;
-const clearBtn = document.querySelector<HTMLButtonElement>(".controls__btn--clear")!;
-const saveBtn = document.querySelector<HTMLButtonElement>(".controls__btn--save")!;
-const gridlinesBtn = document.querySelector<HTMLButtonElement>(".controls__btn--gridlines")!;
+  return element;
+}
+
+function getCanvasContext(canvas: HTMLCanvasElement): CanvasRenderingContext2D {
+  const context = canvas.getContext("2d");
+  if (context === null) throw new Error("Canvas 2D context not available");
+
+  return context;
+}
+
+const canvas = qs<HTMLCanvasElement>(".canvas");
+const ctx = getCanvasContext(canvas);
+
+const canvasColorInput = qs<HTMLInputElement>(".controls__input--canvas-color");
+const paintColorInput = qs<HTMLInputElement>(".controls__input--paint-color");
+const gridSizeLabel = qs<HTMLLabelElement>(".controls__label--grid-size");
+const gridSizeInput = qs<HTMLInputElement>(".controls__input--grid-size");
+const customColorBtn = qs<HTMLButtonElement>(".controls__btn--custom-color");
+const randomColorBtn = qs<HTMLButtonElement>(".controls__btn--random-color");
+const eraserBtn = qs<HTMLButtonElement>(".controls__btn--eraser");
+const clearBtn = qs<HTMLButtonElement>(".controls__btn--clear");
+const saveBtn = qs<HTMLButtonElement>(".controls__btn--save");
+const gridlinesBtn = qs<HTMLButtonElement>(".controls__btn--gridlines");
 
 const gridSizes = [8, 16, 32, 48, 64] as const;
 
