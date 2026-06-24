@@ -17,7 +17,7 @@ const ctx = getCanvasContext(canvas);
 
 const canvasColorInput = qs<HTMLInputElement>(".controls__input--canvas-color");
 const paintColorInput = qs<HTMLInputElement>(".controls__input--paint-color");
-const gridSizeLabel = qs<HTMLLabelElement>(".controls__label--grid-size");
+const gridSizeLabel = qs<HTMLSpanElement>(".controls__label--grid-size");
 const gridSizeInput = qs<HTMLInputElement>(".controls__input--grid-size");
 const customColorBtn = qs<HTMLButtonElement>(".controls__btn--custom-color");
 const randomColorBtn = qs<HTMLButtonElement>(".controls__btn--random-color");
@@ -31,9 +31,8 @@ const gridSizes = [8, 16, 32, 48, 64] as const;
 type PaintMode = "custom-color" | "random-color" | "eraser";
 
 const state = {
-  canvasSize: 576,
   canvasColor: canvasColorInput.value,
-  gridSize: 16,
+  gridSize: gridSizes[gridSizeInput.valueAsNumber],
   gridlines: true,
   gridlinesColor: "#aaa",
   paintMode: "custom-color" as PaintMode,
@@ -43,7 +42,7 @@ const state = {
 };
 
 function renderCanvas() {
-  const cellSize = state.canvasSize / state.gridSize;
+  const cellSize = canvas.width / state.gridSize;
 
   ctx.fillStyle = state.canvasColor;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -140,9 +139,8 @@ function setPaintColor() {
   state.paintColor = paintColorInput.value;
 }
 
-function updateGridSize(e: Event) {
-  const index = gridSizeInput.valueAsNumber;
-  const gridSize = gridSizes[index];
+function setGridSize(e: Event) {
+  const gridSize = gridSizes[gridSizeInput.valueAsNumber];
 
   gridSizeLabel.textContent = `Grid Size: ${gridSize} x ${gridSize}`;
 
@@ -193,8 +191,8 @@ function setupEvents() {
 
   canvasColorInput.addEventListener("input", setCanvasColor);
   paintColorInput.addEventListener("input", setPaintColor);
-  gridSizeInput.addEventListener("input", updateGridSize);
-  gridSizeInput.addEventListener("change", updateGridSize);
+  gridSizeInput.addEventListener("input", setGridSize);
+  gridSizeInput.addEventListener("change", setGridSize);
 
   customColorBtn.addEventListener("click", () => setPaintMode("custom-color"));
   randomColorBtn.addEventListener("click", () => setPaintMode("random-color"));
