@@ -29,7 +29,7 @@
 
         <div class="controls__group controls__group--grid-size">
           <span class="controls__label--grid-size">Grid Size: 16 x 16</span>
-          <input type="range" class="controls__input--grid-size" value="16">
+          <input type="range" class="controls__input--grid-size" min="0" max="4" step="1" value="1">
         </div>
 
         <div class="controls__group">
@@ -47,6 +47,8 @@
           <button class="controls__btn controls__btn--gridlines">Gridlines</button>
         </div>
       </div>
+
+      <canvas class="canvas" width="576" height="576"></canvas>
     </main>
   </body>
 </html>

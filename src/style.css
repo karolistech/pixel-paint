@@ -50,3 +50,7 @@ body {
   flex: 1;
   padding-block: 0.5rem;
 }
+
+.canvas {
+  width: min(100%, 576px);
+}
