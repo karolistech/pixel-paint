@@ -57,6 +57,7 @@ body {
 
 .canvas {
   width: min(100%, 576px);
+  touch-action: pinch-zoom;
 }
 
 @media (min-width: 768px) {
