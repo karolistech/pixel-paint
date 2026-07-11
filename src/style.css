@@ -53,6 +53,17 @@ body {
 .controls__btn {
   flex: 1;
   padding-block: 0.5rem;
+  border: 1px solid #aaa;
+  background-color: #eee;
+  color: #000;
+  font-family: inherit;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.controls__btn--selected {
+  background-color: #444;
+  color: #fff;
 }
 
 .canvas {
