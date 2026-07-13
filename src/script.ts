@@ -8,6 +8,7 @@ const gridSizeInput = document.querySelector<HTMLInputElement>(".controls__input
 const customColorBtn = document.querySelector<HTMLButtonElement>(".controls__btn--custom-color")!;
 const randomColorBtn = document.querySelector<HTMLButtonElement>(".controls__btn--random-color")!;
 const eraserBtn = document.querySelector<HTMLButtonElement>(".controls__btn--eraser")!;
+const clearBtn = document.querySelector<HTMLButtonElement>(".controls__btn--clear")!;
 const gridlinesBtn = document.querySelector<HTMLButtonElement>(".controls__btn--gridlines")!;
 
 const gridSizes = [8, 16, 32, 48, 64] as const;
@@ -118,6 +119,8 @@ function updateGridSize(e: Event) {
 
   if (e.type === "change") {
     state.gridSize = gridSize;
+    state.paintedCells.clear();
+
     renderCanvas();
   }
 }
@@ -126,6 +129,12 @@ function toggleGridlines() {
   state.gridlines = !state.gridlines;
 
   gridlinesBtn.classList.toggle("controls__btn--selected", state.gridlines === true);
+  renderCanvas();
+}
+
+function clearCanvas() {
+  state.paintedCells.clear();
+
   renderCanvas();
 }
 
@@ -154,6 +163,7 @@ function setupEvents() {
   customColorBtn.addEventListener("click", () => setPaintMode("custom-color"));
   randomColorBtn.addEventListener("click", () => setPaintMode("random-color"));
   eraserBtn.addEventListener("click", () => setPaintMode("eraser"));
+  clearBtn.addEventListener("click", clearCanvas);
   gridlinesBtn.addEventListener("click", toggleGridlines);
 }
 
