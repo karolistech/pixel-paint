@@ -1,16 +1,40 @@
-const canvas = document.querySelector<HTMLCanvasElement>(".canvas")!;
-const ctx = canvas.getContext("2d")!;
+function $<T extends HTMLElement>(selector: string, constructor: new () => T): T {
+  const element = document.querySelector(selector);
 
-const canvasColorInput = document.querySelector<HTMLInputElement>(".controls__input--canvas-color")!;
-const paintColorInput = document.querySelector<HTMLInputElement>(".controls__input--paint-color")!;
-const gridSizeLabel = document.querySelector<HTMLLabelElement>(".controls__label--grid-size")!;
-const gridSizeInput = document.querySelector<HTMLInputElement>(".controls__input--grid-size")!;
-const customColorBtn = document.querySelector<HTMLButtonElement>(".controls__btn--custom-color")!;
-const randomColorBtn = document.querySelector<HTMLButtonElement>(".controls__btn--random-color")!;
-const eraserBtn = document.querySelector<HTMLButtonElement>(".controls__btn--eraser")!;
-const saveBtn = document.querySelector<HTMLButtonElement>(".controls__btn--save")!;
-const clearBtn = document.querySelector<HTMLButtonElement>(".controls__btn--clear")!;
-const gridlinesBtn = document.querySelector<HTMLButtonElement>(".controls__btn--gridlines")!;
+  if (element === null) {
+    throw new Error(`Element "${selector}" was not found`);
+  }
+
+  if (!(element instanceof constructor)) {
+    throw new TypeError(`Element "${selector}" is not an instance of ${constructor.name}`);
+  }
+
+  return element;
+}
+
+function getCanvasContext(canvas: HTMLCanvasElement): CanvasRenderingContext2D {
+  const context = canvas.getContext("2d");
+
+  if (context === null) {
+    throw new Error("Canvas 2D context is not available");
+  }
+
+  return context;
+}
+
+const canvas = $(".canvas", HTMLCanvasElement);
+const ctx = getCanvasContext(canvas);
+
+const canvasColorInput = $(".controls__input--canvas-color", HTMLInputElement);
+const paintColorInput = $(".controls__input--paint-color", HTMLInputElement);
+const gridSizeLabel = $(".controls__label--grid-size", HTMLSpanElement);
+const gridSizeInput = $(".controls__input--grid-size", HTMLInputElement);
+const customColorBtn = $(".controls__btn--custom-color", HTMLButtonElement);
+const randomColorBtn = $(".controls__btn--random-color", HTMLButtonElement);
+const eraserBtn = $(".controls__btn--eraser", HTMLButtonElement);
+const saveBtn = $(".controls__btn--save", HTMLButtonElement);
+const clearBtn = $(".controls__btn--clear", HTMLButtonElement);
+const gridlinesBtn = $(".controls__btn--gridlines", HTMLButtonElement);
 
 const gridSizes = [8, 16, 32, 48, 64] as const;
 
