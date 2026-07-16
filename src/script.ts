@@ -40,16 +40,28 @@ const gridSizes = [8, 16, 32, 48, 64] as const;
 
 type PaintMode = "custom-color" | "random-color" | "eraser";
 
-const state = {
+type State = {
+  canvasSize: number;
+  canvasColor: string;
+  gridSize: number;
+  gridlines: boolean;
+  gridlinesColor: string;
+  paintMode: PaintMode;
+  paintColor: string;
+  paintedCells: Map<number, string>;
+  lastPaintedCellIndex: null | number;
+};
+
+const state: State = {
   canvasSize: 576,
   canvasColor: canvasColorInput.value,
   gridSize: 16,
   gridlines: true,
   gridlinesColor: "#aaa",
-  paintMode: "custom-color" as PaintMode,
+  paintMode: "custom-color",
   paintColor: paintColorInput.value,
-  paintedCells: new Map<number, string>(),
-  lastPaintedCellIndex: null as number | null
+  paintedCells: new Map(),
+  lastPaintedCellIndex: null
 };
 
 function renderCanvas() {
