@@ -38,12 +38,13 @@ const gridlinesBtn = $(".controls__btn--gridlines", HTMLButtonElement);
 
 const gridSizes = [8, 16, 32, 48, 64] as const;
 
+type GridSize = typeof gridSizes[number];
+
 type PaintMode = "custom-color" | "random-color" | "eraser";
 
 type State = {
-  canvasSize: number;
   canvasColor: string;
-  gridSize: number;
+  gridSize: GridSize;
   gridlines: boolean;
   gridlinesColor: string;
   paintMode: PaintMode;
@@ -53,9 +54,8 @@ type State = {
 };
 
 const state: State = {
-  canvasSize: 576,
   canvasColor: canvasColorInput.value,
-  gridSize: 16,
+  gridSize: gridSizes[gridSizeInput.valueAsNumber],
   gridlines: true,
   gridlinesColor: "#aaa",
   paintMode: "custom-color",
@@ -65,7 +65,7 @@ const state: State = {
 };
 
 function renderCanvas() {
-  const cellSize = state.canvasSize / state.gridSize;
+  const cellSize = canvas.width / state.gridSize;
 
   ctx.fillStyle = state.canvasColor;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -148,9 +148,8 @@ function setPaintColor() {
   state.paintColor = paintColorInput.value;
 }
 
-function updateGridSize(e: Event) {
-  const index = gridSizeInput.valueAsNumber;
-  const gridSize = gridSizes[index];
+function setGridSize(e: Event) {
+  const gridSize = gridSizes[gridSizeInput.valueAsNumber];
 
   gridSizeLabel.textContent = `Grid Size: ${gridSize} x ${gridSize}`;
 
@@ -202,8 +201,8 @@ function setupEvents() {
 
   canvasColorInput.addEventListener("input", setCanvasColor);
   paintColorInput.addEventListener("input", setPaintColor);
-  gridSizeInput.addEventListener("input", updateGridSize);
-  gridSizeInput.addEventListener("change", updateGridSize);
+  gridSizeInput.addEventListener("input", setGridSize);
+  gridSizeInput.addEventListener("change", setGridSize);
 
   customColorBtn.addEventListener("click", () => setPaintMode("custom-color"));
   randomColorBtn.addEventListener("click", () => setPaintMode("random-color"));
