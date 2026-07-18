@@ -100,34 +100,52 @@ function renderCanvas() {
 function handleCanvasPointer(e: PointerEvent) {
   if (e.buttons !== 1) return;
 
-  const rect = canvas.getBoundingClientRect();
-  const scale = canvas.width / rect.width;
+  const coords = getCanvasCoordinates(e);
+  const cellIndex = getCanvasCellIndex(coords.x, coords.y);
 
-  const x = (e.clientX - rect.left) * scale;
-  const y = (e.clientY - rect.top) * scale;
-
-  const cellSize = canvas.width / state.gridSize;
-  const col = Math.floor(x / cellSize);
-  const row = Math.floor(y / cellSize);
-  if (col < 0 || col >= state.gridSize || row < 0 || row >= state.gridSize) return;
-
-  const cellIndex = row * state.gridSize + col;
+  if (cellIndex === null) return;
   if (cellIndex === state.lastPaintedCellIndex) return;
 
   state.lastPaintedCellIndex = cellIndex;
 
+  setPaintedCell(cellIndex);
+  renderCanvas();
+}
+
+function getCanvasCoordinates(e: PointerEvent): { x: number, y: number } {
+  const rect = canvas.getBoundingClientRect();
+  const scale = canvas.width / rect.width;
+
+  return {
+    x: (e.clientX - rect.left) * scale,
+    y: (e.clientY - rect.top) * scale
+  };
+}
+
+function getCanvasCellIndex(x: number, y: number): number | null {
+  if (x < 0 || y < 0 || x >= canvas.width || y >= canvas.height) return null;
+
+  const cellSize = canvas.width / state.gridSize;
+
+  const col = Math.floor(x / cellSize);
+  const row = Math.floor(y / cellSize);
+
+  return row * state.gridSize + col;
+}
+
+function setPaintedCell(cellIndex: number) {
   switch (state.paintMode) {
     case "custom-color":
       state.paintedCells.set(cellIndex, state.paintColor);
-      break;
+      return;
+
     case "random-color":
       state.paintedCells.set(cellIndex, getRandomColor());
-      break;
+      return;
+
     case "eraser":
       state.paintedCells.delete(cellIndex);
   }
-
-  renderCanvas();
 }
 
 function setCanvasColor() {
@@ -182,7 +200,7 @@ function clearCanvas() {
   renderCanvas();
 }
 
-function getRandomColor() {
+function getRandomColor(): string {
   const randomNumber = Math.floor(Math.random() * 0x1000000);
   const hexCode = `#${randomNumber.toString(16).padStart(6, "0")}`;
 
